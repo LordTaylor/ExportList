@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ExportList</string>
+    <string name="button_name">name</string>
+    <string name="button_date">date</string>
+    <string name="button_user">user</string>
+    <string name="button_location">location</string>
 </resources>

@@ -30,6 +30,7 @@ class ExportRepository(var context: Context) {
             .unsubscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
+                it.forEach({Log.d(TAG,"item in db : ${it._id}")})
                 addToDb(it)
             }, {
                 Log.e(TAG, "error retrofit :Message ${it.localizedMessage}")
