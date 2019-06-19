@@ -1,6 +1,7 @@
 package com.lordtaylor.exportlist.api
 
 import com.google.gson.GsonBuilder
+import com.lordtaylor.exportlist.model.ExportItem
 import com.lordtaylor.exportlist.utils.Constance
 import io.reactivex.Observable
 import io.reactivex.Single
@@ -10,8 +11,8 @@ import retrofit2.http.*
 
 interface Api {
 
-    @GET("/ExportList.json")
-    fun getExports(): Single<String>
+    @GET("ExportList.json")
+    fun getExports(): Single<List<ExportItem>>
 
 
     companion object {
