@@ -4,4 +4,7 @@
     <string name="button_date">date</string>
     <string name="button_user">user</string>
     <string name="button_location">location</string>
+    <string name="button_submit">ok</string>
+    <string name="button_cancle">cancle</string>
+    <string name="edit_text_hint">filter value</string>
 </resources>

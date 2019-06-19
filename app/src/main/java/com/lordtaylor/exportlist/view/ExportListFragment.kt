@@ -1,7 +1,6 @@
 package com.lordtaylor.exportlist.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -10,14 +9,22 @@ import android.widget.Button
 import android.widget.TableRow
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.lordtaylor.exportlist.R
 import com.lordtaylor.exportlist.model.ExportItem
+import com.lordtaylor.exportlist.view.dialogs.AppDialog
+import com.lordtaylor.exportlist.view.dialogs.NormalDialog
 import kotlinx.android.synthetic.main.export_list_fragment.*
+import com.lordtaylor.exportlist.view.dialogs.AppDialog.*
+import com.lordtaylor.exportlist.view.dialogs.DateDialog
 
-class ExportListFragment : Fragment() {
+class ExportListFragment : Fragment(), FilterDialogListener {
+
+
     private val TAG = "ExportListFragment"
+
 
     private lateinit var viewModel: SharedViewModel
 
@@ -31,9 +38,13 @@ class ExportListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProviders.of(this).get(SharedViewModel::class.java)
-        viewModel.getAllItems().observe(this, Observer {
-            items = it
-            initTable()
+        viewModel.getAllItems().observe(this, object : Observer<List<ExportItem>> {
+            override fun onChanged(t: List<ExportItem>?) {
+                items = t!!
+                initTable()
+            }
+
+
         })
 
 
@@ -42,24 +53,24 @@ class ExportListFragment : Fragment() {
     private fun initTable() {
         item_table.removeAllViews()
         var par = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1.0f)
-        par.setMargins(5,5,5,5)
+        par.setMargins(5, 5, 5, 5)
 
         var name = Button(context)
         name.text = getText(R.string.button_name)
         name.layoutParams = par
-        name.setOnClickListener { nameButtonClick(it) }
+        name.setOnClickListener { nameButtonClick(Type.NAME) }
         var date = Button(context)
         date.text = getText(R.string.button_date)
         date.layoutParams = par
-        date.setOnClickListener { dateButtonClick(it) }
+        date.setOnClickListener { dateButtonClick(Type.DATE) }
         var user = Button(context)
         user.text = getText(R.string.button_user)
         user.layoutParams = par
-        user.setOnClickListener { userButtonClick(it) }
+        user.setOnClickListener { userButtonClick(Type.USER) }
         var location = Button(context)
         location.text = getText(R.string.button_location)
         location.layoutParams = par
-        location.setOnClickListener { locationButtonClick(it) }
+        location.setOnClickListener { locationButtonClick(Type.LOCATION) }
         var row = TableRow(context)
 
         row.weightSum = 4.0f
@@ -95,14 +106,56 @@ class ExportListFragment : Fragment() {
 
     }
 
-    private fun nameButtonClick(view: View?) {
-    }
-    private fun dateButtonClick(view: View?) {
-    }
-    private fun userButtonClick(view: View?) {
-    }
-    private fun locationButtonClick(view: View?) {
+    private fun nameButtonClick(type: Type) {
+        var dialog = NormalDialog()
+        fragmentManager?.beginTransaction()!!.addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(android.R.id.content, dialog).commit()
+        dialog.setCallBackListener(this)
+        dialog.setType(type)
     }
 
+    private fun dateButtonClick(type:Type) {
+        var dialog = DateDialog()
+        fragmentManager?.beginTransaction()!!.addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(android.R.id.content, dialog).commit()
+        dialog.setCallBackListener(this)
+        dialog.setType(type)
+    }
+
+    private fun userButtonClick(type: Type) {
+        var dialog = NormalDialog()
+        fragmentManager?.beginTransaction()!!.addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(android.R.id.content, dialog).commit()
+        dialog.setCallBackListener(this)
+        dialog.setType(type)
+    }
+
+    private fun locationButtonClick(type: Type) {
+        var dialog = NormalDialog()
+        fragmentManager?.beginTransaction()!!.addToBackStack(null)
+            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).add(android.R.id.content, dialog).commit()
+        dialog.setCallBackListener(this)
+        dialog.setType(type)
+    }
+
+    override fun onPositiveClick(dialog: AppDialog) {
+
+        viewModel.searchForName(dialog.getType(), dialog.getFilter())
+            .observe(this, object : Observer<List<ExportItem>> {
+                override fun onChanged(t: List<ExportItem>?) {
+                    items = t!!
+                    initTable()
+                }
+            })
+    }
+
+    override fun onNegativeClick() {
+        viewModel.getAllItems().observe(this, object : Observer<List<ExportItem>> {
+            override fun onChanged(t: List<ExportItem>?) {
+                items = t!!
+                initTable()
+            }
+        })
+    }
 
 }
