@@ -7,11 +7,8 @@ import com.lordtaylor.exportlist.api.Api
 import com.lordtaylor.exportlist.model.ExportItem
 import com.lordtaylor.exportlist.room.ExportDatabase
 import io.reactivex.Observable
-import io.reactivex.Scheduler
-import io.reactivex.SingleObserver
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import io.reactivex.subscribers.DefaultSubscriber
 
 class ExportRepository(var context: Context) {
     private val TAG = "ExportRepository"
@@ -30,6 +27,7 @@ class ExportRepository(var context: Context) {
             .unsubscribeOn(Schedulers.computation())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
+                it.forEach({Log.d(TAG,"item in db : ${it._id}")})
                 addToDb(it)
             }, {
                 Log.e(TAG, "error retrofit :Message ${it.localizedMessage}")
@@ -47,6 +45,22 @@ class ExportRepository(var context: Context) {
                 Log.e(TAG, "error ROOM :Message ${it.localizedMessage}")
             })
 
+    }
+
+    fun getNameFilter(name: String): LiveData<List<ExportItem>> {
+        return database.getDao().getNames(name)
+    }
+
+    fun getUsersFilter(users: String): LiveData<List<ExportItem>> {
+        return database.getDao().getUsers(users)
+    }
+
+    fun getLocations(locations: String): LiveData<List<ExportItem>> {
+        return database.getDao().getLocations(locations)
+    }
+
+    fun getDates(dates: String): LiveData<List<ExportItem>> {
+        return database.getDao().getDates(dates)
     }
 
 
