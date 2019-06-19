@@ -27,6 +27,7 @@ class ExportListFragment : Fragment() {
         viewModel.getAllItems().observe(this, Observer {
             items = it
         })
+
     }
 
 
