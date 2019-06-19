@@ -12,9 +12,6 @@ import com.lordtaylor.exportlist.R
 import java.lang.ClassCastException
 import com.lordtaylor.exportlist.view.dialogs.AppDialog.*
 import kotlinx.android.synthetic.main.popup_date_filter.*
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 
 class DateDialog : DialogFragment(), AppDialog {
@@ -22,7 +19,7 @@ class DateDialog : DialogFragment(), AppDialog {
     private val TAG = "DateDialog"
     private lateinit var type: Type
     private lateinit var calen: CalendarView
-    private lateinit var listerner: AppDialog.FilterDialogListener
+    private lateinit var listerner: FilterDialogListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.popup_date_filter, container, false)
@@ -31,7 +28,7 @@ class DateDialog : DialogFragment(), AppDialog {
 
     fun setCallBackListener(context: Fragment?) {
         try {
-            listerner = context as AppDialog.FilterDialogListener
+            listerner = context as FilterDialogListener
         } catch (e: ClassCastException) {
             Log.e(TAG, "error message ${e.localizedMessage}")
         }
@@ -40,14 +37,10 @@ class DateDialog : DialogFragment(), AppDialog {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         calen = calendarView
-        calen.setOnDateChangeListener(
-            CalendarView.OnDateChangeListener { calendarView: CalendarView, y: Int, m: Int, d: Int ->
-                var format = "dd.mm.yyyy"
-                var mm = if (m < 10) m else ("0$m")
-                selectedDate = "${if(d>10)d else "0$d"}.${if (m > 10) m else ("0$m")}.$y".format(format)
-
-            }
-        )
+        calen.setOnDateChangeListener { calendarView: CalendarView, y: Int, m: Int, d: Int ->
+            var mm = if (m < 10) m else ("0$m")
+            selectedDate = "${if(d>10)d else "0$d"}.${if (m > 10) m else ("0$m")}.$y"
+        }
         calendar_button_cancle.setOnClickListener {
             fragmentManager?.popBackStack()
             listerner.onNegativeClick()
@@ -67,9 +60,6 @@ class DateDialog : DialogFragment(), AppDialog {
     }
 
     override fun getFilter(): String {
-//        val sdf = SimpleDateFormat("dd-MM-yy")
-//        selectedDate = sdf.format(selectedDate)
-        Log.d(TAG, "date : $selectedDate")
         return selectedDate
     }
 }

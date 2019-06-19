@@ -1,6 +1,5 @@
 package com.lordtaylor.exportlist.view.dialogs
 
-import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -21,11 +20,6 @@ class NormalDialog : DialogFragment(),AppDialog {
     private lateinit var listerner: FilterDialogListener
     lateinit var text: EditText
 
-
-
-    override fun onAttach(context: Context?) {
-        super.onAttach(context)
-    }
 
     fun setCallBackListener(context: Fragment?) {
         try {
