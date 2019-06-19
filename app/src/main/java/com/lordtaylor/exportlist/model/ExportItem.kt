@@ -13,6 +13,6 @@ data class ExportItem(
     var _id: Long,
     var name: String,
     var date: String,
-    var userID: String,
+    var user: String,
     var location: String
 ) : BaseItem
