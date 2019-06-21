@@ -1,5 +1,6 @@
 package com.lordtaylor.exportlist.view
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -19,6 +20,8 @@ import com.lordtaylor.exportlist.view.dialogs.NormalDialog
 import kotlinx.android.synthetic.main.export_list_fragment.*
 import com.lordtaylor.exportlist.view.dialogs.AppDialog.*
 import com.lordtaylor.exportlist.view.dialogs.DateDialog
+import org.xmlpull.v1.XmlPullParser
+import org.xmlpull.v1.XmlPullParserFactory
 
 class ExportListFragment : Fragment(), FilterDialogListener {
 
@@ -55,20 +58,26 @@ class ExportListFragment : Fragment(), FilterDialogListener {
         var par = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1.0f)
         par.setMargins(5, 5, 5, 5)
 
+
+
         var name = Button(context)
         name.text = getText(R.string.button_name)
+        name.background = resources.getDrawable(R.drawable.drawable_round_button)
         name.layoutParams = par
         name.setOnClickListener { nameButtonClick(Type.NAME) }
         var date = Button(context)
         date.text = getText(R.string.button_date)
+        date.background = resources.getDrawable(R.drawable.drawable_round_button)
         date.layoutParams = par
         date.setOnClickListener { dateButtonClick(Type.DATE) }
         var user = Button(context)
         user.text = getText(R.string.button_user)
+        user.background = resources.getDrawable(R.drawable.drawable_round_button)
         user.layoutParams = par
         user.setOnClickListener { userButtonClick(Type.USER) }
         var location = Button(context)
         location.text = getText(R.string.button_location)
+        location.background = resources.getDrawable(R.drawable.drawable_round_button)
         location.layoutParams = par
         location.setOnClickListener { locationButtonClick(Type.LOCATION) }
         var row = TableRow(context)
@@ -85,16 +94,20 @@ class ExportListFragment : Fragment(), FilterDialogListener {
             tr.weightSum = 4.0f
             tr.gravity = Gravity.CENTER
             var name = TextView(this.context)
+            name.background = resources.getDrawable(R.drawable.drawable_round_text_view)
             name.text = it.name
             name.layoutParams = par
             var date = TextView(context)
             date.text = it.date
+            date.background = resources.getDrawable(R.drawable.drawable_round_text_view)
             date.layoutParams = par
             var user = TextView(context)
             user.text = it.user
+            user.background = resources.getDrawable(R.drawable.drawable_round_text_view)
             user.layoutParams = par
             var location = TextView(context)
             location.text = it.location
+            location.background = resources.getDrawable(R.drawable.drawable_round_text_view)
             location.layoutParams = par
             tr.addView(name)
             tr.addView(date)
